@@ -1,16 +1,12 @@
 import json
-import glob
 import pathlib
 import zipfile
+import argparse
 
 
-def main():
-    zip_fnames = glob.glob("*.zip")
-    zip_fnames
-
-    for fn in zip_fnames:
-        with zipfile.ZipFile(fn, "r") as zip_ref:
-            zip_ref.extractall(".")
+def main(args):
+    with zipfile.ZipFile(args.file, "r") as zip_ref:
+        zip_ref.extractall(".")
 
     d = pathlib.Path("connections/followers_and_following/")
     d_fers = pathlib.Path("followers_1.json")
@@ -46,4 +42,16 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        description="""See who you follow and doesn't follow you back, and vice versa, on Instagram."""
+    )
+
+    parser.add_argument(
+        "file",
+        type=str,
+        help="""Zip file containing Instagram following/follower information (to be requested in your setttings and downloaded manually.""",
+    )
+
+    args = parser.parse_args()
+
+    main(args)
